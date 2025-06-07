@@ -1,13 +1,13 @@
 import {
     responseSuccess,
     responseError,
-} from "../../common/helpers/response.helper";
-import rateResService from "../services/rateRes.service";
+} from "../common/helpers/response.helper";
+import rateService from "../services/rate.service";
 
-const rateResController = {
+const rateController = {
     rate: async (req, res, next) => {
         try {
-            const result = await rateResService(req.sequelize).rate(req.body);
+            const result = await rateService(req.sequelize).rate(req.body);
             const response = responseSuccess(
                 result,
                 "Đánh giá thành công",
@@ -22,7 +22,7 @@ const rateResController = {
 
     getRatesByRestaurant: async (req, res, next) => {
         try {
-            const result = await rateResService(
+            const result = await rateService(
                 req.sequelize
             ).getRatesByRestaurant(req.params.res_id);
             const response = responseSuccess(
@@ -38,7 +38,7 @@ const rateResController = {
 
     getRatesByUser: async (req, res, next) => {
         try {
-            const result = await rateResService(req.sequelize).getRatesByUser(
+            const result = await rateService(req.sequelize).getRatesByUser(
                 req.params.user_id
             );
             const response = responseSuccess(
@@ -53,4 +53,4 @@ const rateResController = {
     },
 };
 
-export default rateResController;
+export default rateController;

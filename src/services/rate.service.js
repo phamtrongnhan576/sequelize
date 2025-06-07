@@ -1,23 +1,23 @@
-import { BadrequestException } from "../../common/helpers/exception.helper";
+import { BadrequestException } from "../common/helpers/exception.helper";
 import initModels from "../models/init-models";
 
 export default (sequelize) => {
-    const { RateRes, User, Restaurant } = initModels(sequelize);
+    const { rate_res, user, restaurant } = initModels(sequelize);
 
     const rate = async ({ user_id, res_id, amount }) => {
-        const user = await User.findOne({
+        const userRate = await user.findOne({
             where: { user_id, isDeleted: false },
         });
-        const restaurant = await Restaurant.findOne({
+        const restaurantRate = await restaurant.findOne({
             where: { res_id, isDeleted: false },
         });
-        if (!user || !restaurant) {
+        if (!userRate || !restaurantRate) {
             throw new BadrequestException(
                 "Người dùng hoặc nhà hàng không tồn tại"
             );
         }
 
-        const existingRate = await RateRes.findOne({
+        const existingRate = await rate_res.findOne({
             where: { user_id, res_id, isDeleted: false },
         });
         if (existingRate) {
@@ -26,7 +26,7 @@ export default (sequelize) => {
             );
         }
 
-        return await RateRes.create({
+        return await rate_res.create({
             user_id,
             res_id,
             amount,
@@ -35,18 +35,18 @@ export default (sequelize) => {
     };
 
     const getRatesByRestaurant = async (res_id) => {
-        const restaurant = await Restaurant.findOne({
+        const restaurantRate = await restaurant.findOne({
             where: { res_id, isDeleted: false },
         });
-        if (!restaurant) {
+        if (!restaurantRate) {
             throw new BadrequestException("Nhà hàng không tồn tại");
         }
 
-        return await RateRes.findAll({
+        return await rate_res.findAll({
             where: { res_id, isDeleted: false },
             include: [
                 {
-                    model: User,
+                    model: user,
                     as: "user",
                     attributes: ["user_id", "full_name"],
                     where: { isDeleted: false },
@@ -56,18 +56,18 @@ export default (sequelize) => {
     };
 
     const getRatesByUser = async (user_id) => {
-        const user = await User.findOne({
+        const userRate = await user.findOne({
             where: { user_id, isDeleted: false },
         });
-        if (!user) {
+        if (!userRate) {
             throw new BadrequestException("Người dùng không tồn tại");
         }
 
-        return await RateRes.findAll({
+        return await rate_res.findAll({
             where: { user_id, isDeleted: false },
             include: [
                 {
-                    model: Restaurant,
+                    model: restaurant,
                     as: "re",
                     attributes: ["res_id", "res_name"],
                     where: { isDeleted: false },
