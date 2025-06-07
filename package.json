@@ -1,0 +1,23 @@
+{
+    "type": "module",
+    "name": "restaurant-api",
+    "version": "1.0.0",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node --import=extensionless/register server.js",
+        "generate-models": "npx sequelize-auto -o './src/models' -d restaurant_db -h localhost -u root -p 3309 -x 123 -e mysql --dialectOptions '{\"charset\": \"utf8mb4\"}' --es6"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "description": "",
+    "dependencies": {
+        "dotenv": "^16.5.0",
+        "express": "^5.1.0",
+        "extensionless": "^1.9.9",
+        "mysql2": "^3.14.1",
+        "sequelize": "^6.37.7",
+        "sequelize-auto": "^0.8.8"
+    }
+}
